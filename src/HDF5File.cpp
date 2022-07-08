@@ -22,11 +22,6 @@ HDF5File::HDF5File(const std::string &h5_file_path, char access_mode)
 
 HDF5File::~HDF5File() { close_file(); }
 
-bool HDF5File::file_exists() {
-  std::fstream file_stream(h5_file_path);
-  return file_stream.good();
-}
-
 void HDF5File::open_file() {
   file = H5Fopen(h5_file_path.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
   if (file < 0) {

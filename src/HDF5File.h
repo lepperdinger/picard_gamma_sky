@@ -17,13 +17,12 @@ public:
   void save_skies(const tensors::tensor_3d &skies);
 
 private:
-  std::string h5_file_path;
+  const std::string &h5_file_path;
   hid_t file;
 
   void open_file();
   void create_file();
   void close_file();
-  bool file_exists();
   tensors::tensor_3d read_emissivity(size_t energy_index);
   std::vector<double> read_vector_attribute(const std::string &attribute_name);
   hssize_t get_number_of_energies();
