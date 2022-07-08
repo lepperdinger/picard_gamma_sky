@@ -1,15 +1,31 @@
 #include "HDF5File.h"
 #include <cassert>
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <sstream>
 
-HDF5File::HDF5File(const std::string &h5_file_path)
+HDF5File::HDF5File(const std::string &h5_file_path, char access_mode)
     : h5_file_path(h5_file_path) {
-  open_file();
+
+  if (access_mode == 'r') {
+    open_file();
+  } else if (access_mode == 'w') {
+    create_file();
+  } else {
+    std::ostringstream message;
+    message << "HDF5File: invalid access mode '" << access_mode
+            << "'. valid modes: 'r', 'w'";
+    throw std::invalid_argument(message.str());
+  }
 }
 
 HDF5File::~HDF5File() { close_file(); }
+
+bool HDF5File::file_exists() {
+  std::fstream file_stream(h5_file_path);
+  return file_stream.good();
+}
 
 void HDF5File::open_file() {
   file = H5Fopen(h5_file_path.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
@@ -76,8 +92,8 @@ tensors::tensor_4d HDF5File::read_emissivities() {
   hssize_t number_of_energies = get_number_of_energies();
   tensors::tensor_4d emissivities;
   for (hssize_t energy{}; energy != number_of_energies; ++energy) {
-	auto emissivity = read_emissivity(energy);
-	emissivities.push_back(emissivity);
+    auto emissivity = read_emissivity(energy);
+    emissivities.push_back(emissivity);
   }
   return emissivities;
 }
@@ -123,4 +139,48 @@ std::vector<double> HDF5File::read_energies() {
   H5Gclose(group);
 
   return energies;
+}
+
+void HDF5File::create_file() {
+  file =
+      H5Fcreate(h5_file_path.c_str(), H5F_ACC_EXCL, H5P_DEFAULT, H5P_DEFAULT);
+  if (file < 0) {
+    std::cerr << "error: Couldn't create the file '" << h5_file_path
+              << "'. Does it already exist?\n";
+    std::exit(1);
+  }
+}
+
+void HDF5File::save_skies(const tensors::tensor_3d &skies) {
+  int number_of_dimensions = 3;
+  auto dimensions = std::make_unique<hsize_t[]>(number_of_dimensions);
+  dimensions[0] = skies.size();
+  dimensions[1] = skies.back().size();
+  dimensions[2] = skies.back().back().size();
+  hid_t data_space =
+      H5Screate_simple(number_of_dimensions, dimensions.get(), nullptr);
+  std::string dataset_name = "gamma_ray_skies";
+  hid_t dataset = H5Dcreate(file, dataset_name.c_str(), H5T_NATIVE_FLOAT,
+                            data_space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+  size_t buffer_size = dimensions[0] * dimensions[1] * dimensions[2];
+  auto buffer = std::make_unique<float[]>(buffer_size);
+
+  for (size_t energy{}; energy != dimensions[0]; ++energy) {
+    for (size_t longitude{}; longitude != dimensions[1]; ++longitude) {
+      for (size_t latitude{}; latitude != dimensions[2]; ++latitude) {
+        size_t index = energy * dimensions[1] * dimensions[2];
+        index += longitude * dimensions[2];
+        index += latitude;
+        buffer[index] = skies[energy][longitude][latitude];
+      }
+    }
+  }
+
+  herr_t error = H5Dwrite(dataset, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL,
+                          H5P_DEFAULT, buffer.get());
+  assert (error >= 0);
+
+  H5Dclose(dataset);
+  H5Sclose(data_space);
 }
