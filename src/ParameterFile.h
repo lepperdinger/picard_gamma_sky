@@ -26,7 +26,7 @@ private:
   std::string get_string(const std::string &parameter_name);
   int get_int(const std::string &parameter_name);
   double get_double(const std::string &parameter_name);
-  std::string file_path;
+  const std::string &file_path;
 };
 
 #endif // GAMMA_SKY_SRC_PARAMETERFILE_H

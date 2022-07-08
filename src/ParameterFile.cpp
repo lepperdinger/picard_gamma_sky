@@ -52,7 +52,7 @@ double ParameterFile::get_double(const std::string &parameter_name) {
 }
 
 ParameterFile::Parameters ParameterFile::get_parameters() {
-  Parameters parameters;
+  Parameters parameters{};
   parameters.xyz_observer_location = {
       get_double("x_observer_location_in_kpc"),
       get_double("y_observer_location_in_kpc"),
