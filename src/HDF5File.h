@@ -9,7 +9,7 @@ class HDF5File {
 public:
   HDF5File(const std::string &h5_file_path);
   ~HDF5File();
-  tensors::tensor_3d read_emissivity(size_t energy_index);
+  tensors::tensor_4d read_emissivities();
   std::vector<double> read_energies();
 
 private:
@@ -18,6 +18,8 @@ private:
 
   void open_file();
   void close_file();
+  tensors::tensor_3d read_emissivity(size_t energy_index);
+  hssize_t get_number_of_energies();
 };
 
 #endif // GAMMA_SKY_SRC_HDF5FILE_H

@@ -72,6 +72,33 @@ tensors::tensor_3d HDF5File::read_emissivity(size_t energy_index) {
   return emissivity;
 }
 
+tensors::tensor_4d HDF5File::read_emissivities() {
+  hssize_t number_of_energies = get_number_of_energies();
+  tensors::tensor_4d emissivities;
+  for (hssize_t energy{}; energy != number_of_energies; ++energy) {
+	auto emissivity = read_emissivity(energy);
+	emissivities.push_back(emissivity);
+  }
+  return emissivities;
+}
+
+hssize_t HDF5File::get_number_of_energies() {
+  std::string group_name = "/Data";
+  hid_t group = H5Gopen2(file, group_name.c_str(), H5P_DEFAULT);
+
+  std::string attribute_name = "RadiationEnergies";
+  hid_t attribute = H5Aopen(group, attribute_name.c_str(), H5P_DEFAULT);
+
+  hid_t attribute_space = H5Aget_space(attribute);
+  hssize_t number_of_energies = H5Sget_simple_extent_npoints(attribute_space);
+
+  H5Sclose(attribute_space);
+  H5Aclose(attribute);
+  H5Gclose(group);
+
+  return number_of_energies;
+}
+
 std::vector<double> HDF5File::read_energies() {
   std::string group_name = "/Data";
   hid_t group = H5Gopen2(file, group_name.c_str(), H5P_DEFAULT);
