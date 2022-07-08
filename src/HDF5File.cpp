@@ -115,30 +115,45 @@ hssize_t HDF5File::get_number_of_energies() {
   return number_of_energies;
 }
 
-std::vector<double> HDF5File::read_energies() {
+std::vector<double>
+HDF5File::read_vector_attribute(const std::string &attribute_name) {
   std::string group_name = "/Data";
   hid_t group = H5Gopen2(file, group_name.c_str(), H5P_DEFAULT);
 
-  std::string attribute_name = "RadiationEnergies";
   hid_t attribute = H5Aopen(group, attribute_name.c_str(), H5P_DEFAULT);
 
   hid_t attribute_space = H5Aget_space(attribute);
-  hssize_t number_of_energies = H5Sget_simple_extent_npoints(attribute_space);
+  hssize_t number_of_elements = H5Sget_simple_extent_npoints(attribute_space);
 
-  auto buffer = std::make_unique<float[]>(number_of_energies);
+  auto buffer = std::make_unique<float[]>(number_of_elements);
   herr_t error = H5Aread(attribute, H5T_NATIVE_FLOAT, buffer.get());
   assert(error >= 0);
 
-  std::vector<double> energies;
-  for (hssize_t i{}; i != number_of_energies; ++i) {
-    energies.push_back(buffer[i]);
+  std::vector<double> data;
+  for (hssize_t i{}; i != number_of_elements; ++i) {
+    data.push_back(buffer[i]);
   }
 
   H5Sclose(attribute_space);
   H5Aclose(attribute);
   H5Gclose(group);
 
-  return energies;
+  return data;
+}
+
+std::vector<double> HDF5File::read_energies() {
+  return read_vector_attribute("RadiationEnergies");
+}
+
+grids::cartesian_grid_3d HDF5File::read_emissivity_grid() {
+  grids::cartesian_grid_3d emissivity_grid;
+  emissivity_grid.x_centers = read_vector_attribute("xGridCentred");
+  emissivity_grid.x_boundaries = read_vector_attribute("xGridLeft");
+  emissivity_grid.y_centers = read_vector_attribute("yGridCentred");
+  emissivity_grid.y_boundaries = read_vector_attribute("yGridLeft");
+  emissivity_grid.z_centers = read_vector_attribute("zGridCentred");
+  emissivity_grid.z_boundaries = read_vector_attribute("zGridLeft");
+  return emissivity_grid;
 }
 
 void HDF5File::create_file() {
@@ -179,7 +194,7 @@ void HDF5File::save_skies(const tensors::tensor_3d &skies) {
 
   herr_t error = H5Dwrite(dataset, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL,
                           H5P_DEFAULT, buffer.get());
-  assert (error >= 0);
+  assert(error >= 0);
 
   H5Dclose(dataset);
   H5Sclose(data_space);
