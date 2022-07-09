@@ -6,6 +6,8 @@
 
 namespace mathematics {
 
+const double four_pi{12.566370614359172};
+
 double sqr(double x);
 
 std::array<double, 3> spherical_to_cartesian(double radius, double longitude,

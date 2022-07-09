@@ -56,8 +56,6 @@ void Sky::initialize_integration_intervals() {
 }
 
 tensors::tensor_3d Sky::compute_gamma_skies() {
-  LineOfSightIntegral integral(radial_step_size, xyz_observer_location,
-                               emissivity_grid, emissivities);
 
   const auto &longitudes = longitude_integration_intervals;
   const auto &latitudes = latitude_integration_intervals;
@@ -66,6 +64,9 @@ tensors::tensor_3d Sky::compute_gamma_skies() {
       {energies.size(), longitudes.size(), latitudes.size()});
 
   for (size_t energy{}; energy != energies.size(); ++energy) {
+    LineOfSightIntegral integral(radial_step_size, xyz_observer_location,
+                                 relative_emissivity_grid,
+                                 emissivities[energy]);
     for (size_t x{}; x != longitudes.size(); ++x) {
       const auto &longitude = longitudes[x];
       std::transform(std::execution::par, latitudes.cbegin(), latitudes.cend(),
