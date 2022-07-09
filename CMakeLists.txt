@@ -26,7 +26,7 @@ include_directories(src)
 file(GLOB SRC CONFIGURE_DEPENDS "src/*.h" "src/*.cpp")
 add_executable(gamma_sky apps/gamma_sky.cpp ${SRC})
 target_link_libraries(gamma_sky ${HDF5_LIBRARIES} TBB::tbb)
-target_compile_options(gamma_sky PRIVATE -Wall -Wextra -Wpedantic) #-Werror)
+target_compile_options(gamma_sky PRIVATE -Wall -Wextra -Wpedantic -Werror)
 
 # tests ########################################################################
 
