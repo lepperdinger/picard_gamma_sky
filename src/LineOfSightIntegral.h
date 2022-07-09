@@ -21,7 +21,6 @@ private:
   const grids::cartesian_grid_3d &grid;
   const tensors::tensor_3d &values;
   std::vector<double> radial_cell_centers;
-  std::vector<double> radial_cell_values;
   TrilinearInterpolation interpolation;
 
   void initialize_radial_cells();
