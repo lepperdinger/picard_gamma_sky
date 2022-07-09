@@ -3,11 +3,10 @@
 #include <cmath>
 #include <numeric>
 
-LineOfSightIntegral::LineOfSightIntegral(
-    double radial_step_size, const std::array<double, 3> &xyz_observer_location,
-    const grids::cartesian_grid_3d &grid, const tensors::tensor_3d &values)
-    : radial_step_size(radial_step_size),
-      xyz_observer_location(xyz_observer_location), grid(grid), values(values),
+LineOfSightIntegral::LineOfSightIntegral(double radial_step_size,
+                                         const grids::cartesian_grid_3d &grid,
+                                         const tensors::tensor_3d &values)
+    : radial_step_size(radial_step_size), grid(grid), values(values),
       interpolation(grid, values) {
   initialize_radial_cells();
 }

@@ -9,7 +9,6 @@
 class LineOfSightIntegral {
 public:
   LineOfSightIntegral(double radial_step_size,
-                      const std::array<double, 3> &xyz_observer_location,
                       const grids::cartesian_grid_3d &grid,
                       const tensors::tensor_3d &values);
   double operator()(const std::array<double, 2> &longitudinal_interval,
@@ -17,7 +16,6 @@ public:
 
 private:
   double radial_step_size;
-  const std::array<double, 3> &xyz_observer_location;
   const grids::cartesian_grid_3d &grid;
   const tensors::tensor_3d &values;
   std::vector<double> radial_cell_centers;
