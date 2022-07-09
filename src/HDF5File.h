@@ -18,7 +18,7 @@ public:
 
 private:
   const std::string &h5_file_path;
-  hid_t file;
+  hid_t file{};
 
   void open_file();
   void create_file();

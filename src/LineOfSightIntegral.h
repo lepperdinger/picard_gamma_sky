@@ -17,7 +17,6 @@ public:
 private:
   double radial_step_size;
   const grids::cartesian_grid_3d &grid;
-  const tensors::tensor_3d &values;
   std::vector<double> radial_cell_centers;
   TrilinearInterpolation interpolation;
 

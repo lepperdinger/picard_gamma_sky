@@ -7,7 +7,6 @@
 
 HDF5File::HDF5File(const std::string &h5_file_path, char access_mode)
     : h5_file_path(h5_file_path) {
-
   if (access_mode == 'r') {
     open_file();
   } else if (access_mode == 'w') {

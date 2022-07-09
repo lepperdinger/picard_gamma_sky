@@ -6,7 +6,7 @@
 LineOfSightIntegral::LineOfSightIntegral(double radial_step_size,
                                          const grids::cartesian_grid_3d &grid,
                                          const tensors::tensor_3d &values)
-    : radial_step_size(radial_step_size), grid(grid), values(values),
+    : radial_step_size(radial_step_size), grid(grid),
       interpolation(grid, values) {
   initialize_radial_cells();
 }
