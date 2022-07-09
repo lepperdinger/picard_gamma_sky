@@ -62,9 +62,18 @@ double LineOfSightIntegral::operator()(
 }
 
 bool LineOfSightIntegral::point_is_within_grid(std::array<double, 3> point) {
-  bool within_x = grid.x_centers.front() <= point[0] <= grid.x_centers.back();
-  bool within_y = grid.y_centers.front() <= point[1] <= grid.y_centers.back();
-  bool within_z = grid.z_centers.front() <= point[2] <= grid.z_centers.back();
+  const double &x_min = grid.x_centers.front();
+  const double &y_min = grid.y_centers.front();
+  const double &z_min = grid.z_centers.front();
+
+  const double &x_max = grid.x_centers.back();
+  const double &y_max = grid.y_centers.back();
+  const double &z_max = grid.z_centers.back();
+
+
+  bool within_x = x_min <= point[0] && point[0] <= x_max;
+  bool within_y = y_min <= point[1] && point[1] <= y_max;
+  bool within_z = z_min <= point[2] && point[2] <= z_max;
   bool within_grid = within_x && within_y && within_z;
   return within_grid;
 }
