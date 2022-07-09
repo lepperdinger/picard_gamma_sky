@@ -5,6 +5,8 @@ project(gamma_sky)
 find_package(HDF5 REQUIRED)
 include_directories(${HDF5_INCLUDE_DIRS})
 
+find_package(TBB REQUIRED)
+
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -17,7 +19,7 @@ FetchContent_MakeAvailable(googletest)
 include_directories(src)
 file(GLOB SRC CONFIGURE_DEPENDS "src/*.h" "src/*.cpp")
 add_executable(gamma_sky ${SRC})
-target_link_libraries(gamma_sky ${HDF5_LIBRARIES})
+target_link_libraries(gamma_sky ${HDF5_LIBRARIES} TBB::tbb)
 target_compile_options(gamma_sky PRIVATE -Wall -Wextra -Wpedantic) #-Werror)
 
 enable_testing()
