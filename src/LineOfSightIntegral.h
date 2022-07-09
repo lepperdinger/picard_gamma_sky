@@ -26,10 +26,10 @@ private:
 
   void initialize_radial_cells();
   bool point_is_within_grid(std::array<double, 3> point);
-	static double
-	get_integration_factor(const std::array<double, 2> &longitudinal_interval,
-						   const std::array<double, 2> &latitudinal_interval,
-						   double radial_step_size);
+  static double
+  get_integration_factor(const std::array<double, 2> &longitudinal_interval,
+                         const std::array<double, 2> &latitudinal_interval,
+                         double radial_step_size);
 };
 
 #endif // GAMMA_SKY_SRC_LINEOFSIGHTINTEGRAL_H

@@ -53,9 +53,8 @@ double LineOfSightIntegral::operator()(
       std::accumulate(radial_cell_values.cbegin(),
                       radial_cell_values.cbegin() + number_of_radial_cells, 0.);
 
-  auto integration_factor = get_integration_factor(longitudinal_interval,
-                                                   latitudinal_interval,
-                                                   radial_step_size);
+  auto integration_factor = get_integration_factor(
+      longitudinal_interval, latitudinal_interval, radial_step_size);
 
   double integral = integration_factor * sum;
   return integral;
@@ -70,7 +69,6 @@ bool LineOfSightIntegral::point_is_within_grid(std::array<double, 3> point) {
   const double &y_max = grid.y_centers.back();
   const double &z_max = grid.z_centers.back();
 
-
   bool within_x = x_min <= point[0] && point[0] <= x_max;
   bool within_y = y_min <= point[1] && point[1] <= y_max;
   bool within_z = z_min <= point[2] && point[2] <= z_max;
@@ -79,13 +77,13 @@ bool LineOfSightIntegral::point_is_within_grid(std::array<double, 3> point) {
 }
 
 double LineOfSightIntegral::get_integration_factor(
-	const std::array<double, 2> &longitudinal_interval,
-	const std::array<double, 2> &latitudinal_interval, double radial_step_size)
-{
-	const double &p0 = longitudinal_interval[0];
-	const double &p1 = longitudinal_interval[1];
-	const double &l0 = latitudinal_interval[0];
-	const double &l1 = latitudinal_interval[1];
-    const double &four_pi = mathematics::four_pi;
-	return (p1 - p0) * (sin(l1) - sin(l0)) * radial_step_size / four_pi;
+    const std::array<double, 2> &longitudinal_interval,
+    const std::array<double, 2> &latitudinal_interval,
+    double radial_step_size) {
+  const double &p0 = longitudinal_interval[0];
+  const double &p1 = longitudinal_interval[1];
+  const double &l0 = latitudinal_interval[0];
+  const double &l1 = latitudinal_interval[1];
+  const double &four_pi = mathematics::four_pi;
+  return (p1 - p0) * (sin(l1) - sin(l0)) * radial_step_size / four_pi;
 }
