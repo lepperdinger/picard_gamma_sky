@@ -20,11 +20,9 @@ struct cartesian_grid_3d {
 struct longitude_latitude_grid {
   std::vector<double> longitude_centers;
   std::vector<double> longitude_boundaries;
-  std::vector<std::array<double, 2>> longitude_integration_intervals;
 
   std::vector<double> latitude_centers;
   std::vector<double> latitude_boundaries;
-  std::vector<std::array<double, 2>> latitude_integration_intervals;
 };
 
 } // namespace grids
