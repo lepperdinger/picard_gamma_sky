@@ -19,9 +19,11 @@ private:
   const grids::cartesian_grid_3d &grid;
   std::vector<double> radial_cell_centers;
   TrilinearInterpolation interpolation;
+  double integration_factor{};
 
   void initialize_radial_cells();
   bool point_is_within_grid(std::array<double, 3> point);
+  void initialize_integration_factor();
 };
 
 #endif // GAMMA_SKY_SRC_LINEOFSIGHTINTEGRAL_H
