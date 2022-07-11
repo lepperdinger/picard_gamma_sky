@@ -23,8 +23,9 @@ private:
   void open_file();
   void create_file();
   void close_file();
-  tensors::tensor_3d read_emissivity(size_t energy_index, double energy);
+  tensors::tensor_3d read_emissivity(size_t energy_index);
   std::vector<double> read_vector_attribute(const std::string &attribute_name);
+  hssize_t get_number_of_energies();
 };
 
 #endif // GAMMA_SKY_SRC_HDF5FILE_H
