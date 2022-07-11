@@ -22,7 +22,6 @@ private:
 
   void initialize_radial_cells();
   bool point_is_within_grid(std::array<double, 3> point);
-  static double
 };
 
 #endif // GAMMA_SKY_SRC_LINEOFSIGHTINTEGRAL_H
