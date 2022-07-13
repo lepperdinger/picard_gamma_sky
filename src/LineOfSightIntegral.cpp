@@ -36,11 +36,8 @@ void LineOfSightIntegral::initialize_radial_cells() {
 }
 
 double LineOfSightIntegral::operator()(
-    const std::array<double, 2> &longitudinal_interval,
-    const std::array<double, 2> &latitudinal_interval) {
-  double longitude =
-      (longitudinal_interval[1] + longitudinal_interval[0]) * 0.5;
-  double latitude = (latitudinal_interval[1] + latitudinal_interval[0]) * 0.5;
+    double longitude,
+    double latitude) {
   std::vector<double> radial_cell_values;
 
   for (const auto &radius : radial_cell_centers) {

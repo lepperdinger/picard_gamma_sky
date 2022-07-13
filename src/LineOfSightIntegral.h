@@ -11,8 +11,8 @@ public:
   LineOfSightIntegral(double radial_step_size,
                       const grids::cartesian_grid_3d &grid,
                       const tensors::tensor_3d &values);
-  double operator()(const std::array<double, 2> &longitudinal_interval,
-                    const std::array<double, 2> &latitudinal_interval);
+  double operator()(double longitude,
+                    double latitude);
 
 private:
   double radial_step_size;

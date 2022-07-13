@@ -21,7 +21,6 @@ Sky::Sky(const std::vector<double> &energies,
 {
   initialize_sky_grid();
   initialize_relative_emissivity_grid();
-  initialize_integration_intervals();
 }
 
 void Sky::initialize_sky_grid() {
@@ -48,17 +47,10 @@ void Sky::initialize_relative_emissivity_grid() {
       make_relative_grid(emissivity_grid.z_centers, xyz_observer_location[2]);
 }
 
-void Sky::initialize_integration_intervals() {
-  longitude_integration_intervals =
-      get_integration_intervals(sky_grid.longitude_boundaries);
-  latitude_integration_intervals =
-      get_integration_intervals(sky_grid.latitude_boundaries);
-}
-
 tensors::tensor_3d Sky::compute_gamma_skies() {
 
-  const auto &longitudes = longitude_integration_intervals;
-  const auto &latitudes = latitude_integration_intervals;
+  const auto &longitudes = sky_grid.longitude_centers;
+  const auto &latitudes = sky_grid.latitude_centers;
 
   auto skies = tensors::make_3d_tensor(
       {energies.size(), longitudes.size(), latitudes.size()});
@@ -70,7 +62,7 @@ tensors::tensor_3d Sky::compute_gamma_skies() {
       const auto &longitude = longitudes[x];
       std::transform(std::execution::par, latitudes.cbegin(), latitudes.cend(),
                      skies[energy][x].begin(),
-                     [&](const std::array<double, 2> &latitude) {
+                     [&](double latitude) {
                        return integral(longitude, latitude);
                      });
     }
@@ -86,19 +78,6 @@ std::vector<double> Sky::make_relative_grid(const std::vector<double> &grid,
       grid.cbegin(), grid.cend(), std::back_inserter(relative_grid),
       [&observer_location](double x) { return x - observer_location; });
   return relative_grid;
-}
-
-std::vector<std::array<double, 2>>
-Sky::get_integration_intervals(const std::vector<double> &cell_boundaries) {
-  auto number_of_intervals = cell_boundaries.size() - 1;
-  std::vector<std::array<double, 2>> integration_intervals;
-  integration_intervals.reserve(number_of_intervals);
-  for (size_t i{}; i != number_of_intervals; ++i) {
-    integration_intervals.push_back(
-        {cell_boundaries[i], cell_boundaries[i + 1]});
-  }
-
-  return integration_intervals;
 }
 
 void Sky::make_grid(size_t number_of_grid_points,

@@ -16,15 +16,12 @@ public:
 private:
   void initialize_sky_grid();
   void initialize_relative_emissivity_grid();
-  void initialize_integration_intervals();
   static void make_grid(size_t number_of_grid_points,
                         const std::array<double, 2> &grid_interval,
                         std::vector<double> &cell_boundaries,
                         std::vector<double> &cell_centers);
   static std::vector<double> make_relative_grid(const std::vector<double> &grid,
                                                 double observer_location);
-  static std::vector<std::array<double, 2>>
-  get_integration_intervals(const std::vector<double> &cell_boundaries);
 
   grids::longitude_latitude_grid sky_grid;
   grids::cartesian_grid_3d relative_emissivity_grid;
@@ -41,8 +38,6 @@ private:
   // minimum and maximum of the latitudinal grid in radian
   std::array<double, 2> latitudinal_grid_interval;
   size_t number_of_latitudinal_grid_points;
-  std::vector<std::array<double, 2>> longitude_integration_intervals;
-  std::vector<std::array<double, 2>> latitude_integration_intervals;
 };
 
 #endif // GAMMA_SKY_SRC_SKY_H
