@@ -13,10 +13,10 @@ LineOfSightIntegral::LineOfSightIntegral(double radial_step_size,
 }
 
 void LineOfSightIntegral::initialize_integration_factor() {
-	double pc_to_m = 3.0856775814913673e16;
-	double kpc_to_cm = 1e3 * 1e2 * pc_to_m;
-	double radial_step_size_in_cm = radial_step_size * kpc_to_cm;
-	integration_factor = radial_step_size_in_cm / mathematics::four_pi;
+  double pc_to_m = 3.0856775814913673e16;
+  double kpc_to_cm = 1e3 * 1e2 * pc_to_m;
+  double radial_step_size_in_cm = radial_step_size * kpc_to_cm;
+  integration_factor = radial_step_size_in_cm / mathematics::four_pi;
 }
 
 void LineOfSightIntegral::initialize_radial_cells() {
@@ -35,9 +35,7 @@ void LineOfSightIntegral::initialize_radial_cells() {
   }
 }
 
-double LineOfSightIntegral::operator()(
-    double longitude,
-    double latitude) {
+double LineOfSightIntegral::operator()(double longitude, double latitude) {
   std::vector<double> radial_cell_values;
 
   for (const auto &radius : radial_cell_centers) {

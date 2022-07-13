@@ -61,8 +61,7 @@ tensors::tensor_3d Sky::compute_gamma_skies() {
     for (size_t x{}; x != longitudes.size(); ++x) {
       const auto &longitude = longitudes[x];
       std::transform(std::execution::par, latitudes.cbegin(), latitudes.cend(),
-                     skies[energy][x].begin(),
-                     [&](double latitude) {
+                     skies[energy][x].begin(), [&](double latitude) {
                        return integral(longitude, latitude);
                      });
     }
