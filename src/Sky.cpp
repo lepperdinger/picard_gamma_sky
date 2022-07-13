@@ -1,4 +1,5 @@
 #include "Sky.h"
+#include "mathematics.h"
 #include <LineOfSightIntegral.h>
 #include <algorithm>
 #include <execution>
@@ -11,23 +12,21 @@ Sky::Sky(const std::vector<double> &energies,
       emissivity_grid(emissivity_grid),
       xyz_observer_location(parameters.xyz_observer_location),
       radial_step_size(parameters.radial_step_size),
-      longitudinal_grid_interval(parameters.longitudinal_grid_interval),
-      number_of_longitudinal_grid_points(
-          parameters.number_of_longitudinal_grid_points),
-      latitudinal_grid_interval(parameters.latitudinal_grid_interval),
-      number_of_latitudinal_grid_points(
-          parameters.number_of_latitudinal_grid_points)
-
-{
-  initialize_sky_grid();
+      healpix_order(parameters.healpix_order) {
+  initialize_sky_pixels();
   initialize_relative_emissivity_grid();
 }
 
-void Sky::initialize_sky_grid() {
-  make_grid(number_of_longitudinal_grid_points, longitudinal_grid_interval,
-            sky_grid.longitude_boundaries, sky_grid.longitude_centers);
-  make_grid(number_of_latitudinal_grid_points, latitudinal_grid_interval,
-            sky_grid.latitude_boundaries, sky_grid.latitude_centers);
+void Sky::initialize_sky_pixels() {
+  Healpix_Map<double> healpix_map(healpix_order, RING);
+  number_of_sky_pixels = healpix_map.Npix();
+  sky_coordinates = tensors::make_2d_tensor({number_of_sky_pixels, 2});
+  for (size_t i{}; i != number_of_sky_pixels; ++i) {
+    auto pixel = healpix_map.pix2ang(static_cast<int>(i));
+    auto longitude = pixel.phi;
+    auto latitude = mathematics::half_pi - pixel.theta;
+    sky_coordinates[i] = {longitude, latitude};
+  }
 }
 
 void Sky::initialize_relative_emissivity_grid() {
@@ -47,24 +46,19 @@ void Sky::initialize_relative_emissivity_grid() {
       make_relative_grid(emissivity_grid.z_centers, xyz_observer_location[2]);
 }
 
-tensors::tensor_3d Sky::compute_gamma_skies() {
-
-  const auto &longitudes = sky_grid.longitude_centers;
-  const auto &latitudes = sky_grid.latitude_centers;
-
-  auto skies = tensors::make_3d_tensor(
-      {energies.size(), longitudes.size(), latitudes.size()});
-
-  for (size_t energy{}; energy != energies.size(); ++energy) {
+tensors::tensor_2d Sky::compute_gamma_skies() {
+  auto number_of_energies = energies.size();
+  auto skies =
+      tensors::make_2d_tensor({number_of_energies, number_of_sky_pixels});
+  for (size_t energy{}; energy != number_of_energies; ++energy) {
     LineOfSightIntegral integral(radial_step_size, relative_emissivity_grid,
                                  emissivities[energy]);
-    for (size_t x{}; x != longitudes.size(); ++x) {
-      const auto &longitude = longitudes[x];
-      std::transform(std::execution::par, latitudes.cbegin(), latitudes.cend(),
-                     skies[energy][x].begin(), [&](double latitude) {
-                       return integral(longitude, latitude);
-                     });
-    }
+    auto &sky = skies[energy];
+    std::transform(std::execution::par, sky_coordinates.cbegin(),
+                   sky_coordinates.cend(), sky.begin(),
+                   [&](const auto &coordinates) {
+                     return integral(coordinates[0], coordinates[1]);
+                   });
   }
   return skies;
 }
@@ -77,28 +71,4 @@ std::vector<double> Sky::make_relative_grid(const std::vector<double> &grid,
       grid.cbegin(), grid.cend(), std::back_inserter(relative_grid),
       [&observer_location](double x) { return x - observer_location; });
   return relative_grid;
-}
-
-void Sky::make_grid(size_t number_of_grid_points,
-                    const std::array<double, 2> &grid_interval,
-                    std::vector<double> &cell_boundaries,
-                    std::vector<double> &cell_centers) {
-  double interval_range = grid_interval[1] - grid_interval[0];
-  double cell_width = interval_range / number_of_grid_points;
-  double half_cell_width = cell_width * .5;
-  size_t number_of_cells = number_of_grid_points;
-  size_t number_of_boundaries = number_of_grid_points + 1;
-
-  cell_boundaries.reserve(number_of_boundaries);
-  for (size_t index{0}; index != number_of_boundaries; ++index) {
-    double cell_boundary = grid_interval[0] + cell_width * index;
-    cell_boundaries.push_back(cell_boundary);
-  }
-
-  cell_centers.reserve(number_of_cells);
-  for (size_t index{0}; index != number_of_cells; ++index) {
-    double cell_center =
-        grid_interval[0] + half_cell_width + cell_width * index;
-    cell_centers.push_back(cell_center);
-  }
 }

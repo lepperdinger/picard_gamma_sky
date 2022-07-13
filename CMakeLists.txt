@@ -20,19 +20,24 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+# HealPix
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+find_package(HealPix REQUIRED)
+
 # gamma_sky ####################################################################
 
-include_directories(src)
+include_directories(src ${HEALPIX_INCLUDE_DIR})
 file(GLOB SRC CONFIGURE_DEPENDS "src/*.h" "src/*.cpp")
 add_executable(gamma_sky apps/gamma_sky.cpp ${SRC})
-target_link_libraries(gamma_sky ${HDF5_LIBRARIES} TBB::tbb)
-target_compile_options(gamma_sky PRIVATE -Wall -Wextra -Wpedantic -Werror)
+target_link_libraries(gamma_sky ${HDF5_LIBRARIES} ${HEALPIX_LIBRARIES}
+                      TBB::tbb)
+target_compile_options(gamma_sky PRIVATE -Wall -Wextra -Wpedantic) # -Werror)
 
 # tests ########################################################################
 
 add_executable(test_mathematics test/test_mathematics.cpp ${SRC})
 target_link_libraries(test_mathematics gtest gtest_main ${HDF5_LIBRARIES}
-                      TBB::tbb)
+                      ${HEALPIX_LIBRARIES} TBB::tbb)
 add_test(test_mathematics test_mathematics)
 
 enable_testing()

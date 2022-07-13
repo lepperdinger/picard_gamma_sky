@@ -14,7 +14,7 @@ public:
   std::vector<double> read_energies();
   grids::cartesian_grid_3d read_emissivity_grid();
 
-  void save_skies(const tensors::tensor_3d &skies);
+  void save_skies(const tensors::tensor_2d &skies);
 
 private:
   const std::string &h5_file_path;

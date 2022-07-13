@@ -17,14 +17,6 @@ struct cartesian_grid_3d {
   std::vector<double> z_boundaries;
 };
 
-struct longitude_latitude_grid {
-  std::vector<double> longitude_centers;
-  std::vector<double> longitude_boundaries;
-
-  std::vector<double> latitude_centers;
-  std::vector<double> latitude_boundaries;
-};
-
 } // namespace grids
 
 #endif // GAMMA_SKY_SRC_GRIDS_H

@@ -18,6 +18,7 @@ public:
     // minimum and maximum of the latitudinal grid in radian
     std::array<double, 2> latitudinal_grid_interval;
     int number_of_latitudinal_grid_points;
+    int healpix_order;
   };
   explicit ParameterFile(const std::string &file_path);
   Parameters get_parameters();

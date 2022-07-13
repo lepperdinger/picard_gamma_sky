@@ -160,29 +160,25 @@ void HDF5File::create_file() {
   }
 }
 
-void HDF5File::save_skies(const tensors::tensor_3d &skies) {
-  int number_of_dimensions = 3;
+void HDF5File::save_skies(const tensors::tensor_2d &skies) {
+  int number_of_dimensions = 2;
   auto dimensions = std::make_unique<hsize_t[]>(number_of_dimensions);
   dimensions[0] = skies.size();
   dimensions[1] = skies.back().size();
-  dimensions[2] = skies.back().back().size();
   hid_t data_space =
       H5Screate_simple(number_of_dimensions, dimensions.get(), nullptr);
+
   std::string dataset_name = "gamma_ray_skies";
   hid_t dataset = H5Dcreate(file, dataset_name.c_str(), H5T_NATIVE_FLOAT,
                             data_space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
-  size_t buffer_size = dimensions[0] * dimensions[1] * dimensions[2];
+  size_t buffer_size = dimensions[0] * dimensions[1];
   auto buffer = std::make_unique<float[]>(buffer_size);
 
   for (size_t energy{}; energy != dimensions[0]; ++energy) {
-    for (size_t longitude{}; longitude != dimensions[1]; ++longitude) {
-      for (size_t latitude{}; latitude != dimensions[2]; ++latitude) {
-        size_t index = energy * dimensions[1] * dimensions[2];
-        index += longitude * dimensions[2];
-        index += latitude;
-        buffer[index] = skies[energy][longitude][latitude];
-      }
+    for (size_t pixel{}; pixel != dimensions[1]; ++pixel) {
+      size_t index = energy * dimensions[1] + pixel;
+      buffer[index] = static_cast<float>(skies[energy][pixel]);
     }
   }
 

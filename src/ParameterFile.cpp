@@ -71,5 +71,6 @@ ParameterFile::Parameters ParameterFile::get_parameters() {
   };
   parameters.number_of_latitudinal_grid_points =
       get_int("number_of_latitudinal_grid_points");
+  parameters.healpix_order = get_int("healpix_order");
   return parameters;
 }
