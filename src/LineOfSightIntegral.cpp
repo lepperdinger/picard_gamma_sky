@@ -30,7 +30,8 @@ void LineOfSightIntegral::initialize_radial_cells() {
   radial_cell_centers.reserve(maximum_number_of_radial_bins);
   double half_step_size = radial_step_size * .5;
   for (size_t i{}; i != maximum_number_of_radial_bins; ++i) {
-    double radial_cell_center = half_step_size + i * radial_step_size;
+    double radial_cell_center =
+        half_step_size + static_cast<double>(i) * radial_step_size;
     radial_cell_centers.push_back(radial_cell_center);
   }
 }

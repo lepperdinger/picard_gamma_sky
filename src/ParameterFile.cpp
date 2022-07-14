@@ -59,18 +59,10 @@ ParameterFile::Parameters ParameterFile::get_parameters() {
       get_double("z_observer_location_in_kpc"),
   };
   parameters.radial_step_size = get_double("radial_bin_size_in_kpc");
-  parameters.longitudinal_grid_interval = {
-      get_double("longitudinal_grid_minimum_in_degrees") * DEGREES_TO_RADIAN,
-      get_double("longitudinal_grid_maximum_in_degrees") * DEGREES_TO_RADIAN,
-  };
-  parameters.number_of_longitudinal_grid_points =
-      get_int("number_of_longitudinal_grid_points");
-  parameters.latitudinal_grid_interval = {
-      get_double("latitudinal_grid_minimum_in_degrees") * DEGREES_TO_RADIAN,
-      get_double("latitudinal_grid_maximum_in_degrees") * DEGREES_TO_RADIAN,
-  };
-  parameters.number_of_latitudinal_grid_points =
-      get_int("number_of_latitudinal_grid_points");
+  parameters.line_of_sight_longitude =
+      get_double("line_of_sight_longitude_in_degrees") * DEGREES_TO_RADIAN;
+  parameters.line_of_sight_latitude =
+      get_double("line_of_sight_latitude_in_degrees") * DEGREES_TO_RADIAN;
   parameters.healpix_order = get_int("healpix_order");
   return parameters;
 }

@@ -12,12 +12,11 @@ public:
     std::array<double, 3> xyz_observer_location;
     // size of the radial bins in kpc
     double radial_step_size;
-    // minimum and maximum of the longitudinal grid in radian
-    std::array<double, 2> longitudinal_grid_interval;
-    int number_of_longitudinal_grid_points;
-    // minimum and maximum of the latitudinal grid in radian
-    std::array<double, 2> latitudinal_grid_interval;
-    int number_of_latitudinal_grid_points;
+    // longitude of the direction in which the observer looks in radian
+    double line_of_sight_longitude;
+    // latitude of the direction in which the observer looks in radian
+    double line_of_sight_latitude;
+    // determines the number of pixels of the gamma sky
     int healpix_order;
   };
   explicit ParameterFile(const std::string &file_path);

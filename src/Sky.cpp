@@ -12,7 +12,9 @@ Sky::Sky(const std::vector<double> &energies,
       emissivity_grid(emissivity_grid),
       xyz_observer_location(parameters.xyz_observer_location),
       radial_step_size(parameters.radial_step_size),
-      healpix_order(parameters.healpix_order) {
+      healpix_order(parameters.healpix_order),
+      line_of_sight_longitude(parameters.line_of_sight_longitude),
+      line_of_sight_latitude(parameters.line_of_sight_latitude) {
   initialize_sky_pixels();
   initialize_relative_emissivity_grid();
 }
@@ -25,6 +27,11 @@ void Sky::initialize_sky_pixels() {
     auto pixel = healpix_map.pix2ang(static_cast<int>(i));
     auto longitude = pixel.phi;
     auto latitude = mathematics::half_pi - pixel.theta;
+
+    // add the direction in which the observer looks
+    longitude += line_of_sight_longitude;
+    latitude += line_of_sight_latitude;
+
     sky_coordinates[i] = {longitude, latitude};
   }
 }

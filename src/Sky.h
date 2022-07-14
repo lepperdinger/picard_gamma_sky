@@ -32,6 +32,8 @@ private:
   // size of the radial bins in kpc
   double radial_step_size;
   int healpix_order{};
+  double line_of_sight_longitude;
+  double line_of_sight_latitude;
 };
 
 #endif // GAMMA_SKY_SRC_SKY_H
