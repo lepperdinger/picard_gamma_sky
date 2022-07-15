@@ -6,8 +6,17 @@
 
 class TrilinearInterpolation {
 public:
+  /**
+   * @param grid linear (!) cartesian grid
+   * @param values values[x][y][z] at the grid points
+   */
   TrilinearInterpolation(const grids::cartesian_grid_3d &grid,
                          const tensors::tensor_3d &values);
+  /**
+   * Interpolates the value at the specified location.
+   * @param xyz_location interpolation location
+   * @return interpolated value
+   */
   double operator()(std::array<double, 3> xyz_location);
 
 private:
@@ -17,6 +26,7 @@ private:
   double x_step_size;
   double y_step_size;
   double z_step_size;
+  // values[x][y][z] at the grid points
   const tensors::tensor_3d &values;
 };
 

@@ -6,14 +6,34 @@
 #include <hdf5.h>
 #include <string>
 
+/**
+ * Class for reading and writing to HDF5 files.
+ */
 class HDF5File {
 public:
+  /**
+   * @param h5_file_path file path of the HDF5 file
+   * @param access_mode either 'r' or 'w'. Use 'r' if you want to read data from
+   *                    a file and 'w' if you want to write data to a file.
+   */
   HDF5File(const std::string &h5_file_path, char access_mode);
   ~HDF5File();
+  /**
+   * @return emissivities[energy][x][y][z] in MeV / (s sr cm³)
+   */
   tensors::tensor_4d read_emissivities();
+  /**
+   * @return energies in MeV
+   */
   std::vector<double> read_energies();
+  /**
+   * @return cartesian grid in kpc
+   */
   grids::cartesian_grid_3d read_emissivity_grid();
 
+  /**
+   * @param skies skies[energy][pixel] in MeV / (s sr cm²)
+   */
   void save_skies(const tensors::tensor_2d &skies);
 
 private:
@@ -23,7 +43,16 @@ private:
   void open_file();
   void create_file();
   void close_file();
+  /**
+   * @param energy_index determines the energy of the emissivity
+   * @return emissivity[x][y][z] in MeV / (s sr cm³)
+   */
   tensors::tensor_3d read_emissivity(size_t energy_index);
+  /**
+   * Reads an attribute vector from the group "/Data" of the HDF5 file.
+   * @param attribute_name name of the attribute
+   * @return attribute vector
+   */
   std::vector<double> read_vector_attribute(const std::string &attribute_name);
   hssize_t get_number_of_energies();
 };
