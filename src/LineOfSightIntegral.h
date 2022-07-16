@@ -37,7 +37,6 @@ private:
   double integration_factor{};
 
   void initialize_radial_cells();
-  bool point_is_within_grid(std::array<double, 3> point);
   void initialize_integration_factor();
 };
 

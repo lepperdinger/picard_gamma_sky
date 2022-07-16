@@ -7,6 +7,7 @@
 namespace mathematics {
 
 const double half_pi{1.5707963267948966};
+const double two_pi{6.283185307179586};
 const double four_pi{12.566370614359172};
 
 double sqr(double x);

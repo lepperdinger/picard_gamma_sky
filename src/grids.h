@@ -15,6 +15,8 @@ struct cartesian_grid_3d {
 
   std::vector<double> z_centers;
   std::vector<double> z_boundaries;
+
+  [[nodiscard]] bool is_within_grid(const std::array<double, 3> &point) const;
 };
 
 } // namespace grids

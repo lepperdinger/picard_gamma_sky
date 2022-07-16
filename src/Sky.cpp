@@ -15,8 +15,41 @@ Sky::Sky(const std::vector<double> &energies,
       healpix_order(parameters.healpix_order),
       line_of_sight_longitude(parameters.line_of_sight_longitude),
       line_of_sight_latitude(parameters.line_of_sight_latitude) {
+
+  check_parameters();
   initialize_sky_pixels();
   initialize_relative_emissivity_grid();
+}
+
+void Sky::check_parameter(bool condition, const std::string &message) {
+  if (!condition) {
+    std::cerr << "error: " << message << '\n';
+    std::exit(1);
+  }
+}
+
+void Sky::check_parameters() const {
+  check_parameter(emissivity_grid.is_within_grid(xyz_observer_location),
+                  "The location of the observer has to be within the spatial "
+                  "emissivity grid. Please check the parameters "
+                  "x/y/z_observer_location_in_kpc in the parameter file.");
+  check_parameter(
+      radial_step_size > 0,
+      "The radial step size has to be greater than 0. Please check the "
+      "parameter radial_bin_size_in_kpc in the parameter file.");
+  check_parameter(healpix_order >= 0,
+                  "The HEALPix order has to be non-negative. Please check the "
+                  "parameter healpix_order in the parameter file.");
+  check_parameter(0 <= line_of_sight_longitude &&
+                      line_of_sight_longitude <= mathematics::two_pi,
+                  "The line of sight longitude has to be within the interval "
+                  "[0°, 360°]. Please check the parameter "
+                  "line_of_sight_longitude_in_degrees in the parameter file.");
+  check_parameter(-mathematics::half_pi <= line_of_sight_latitude &&
+                      line_of_sight_latitude <= mathematics::half_pi,
+                  "The line of sight latitude has to be within the interval "
+                  "[-90°, 90°]. Please check the parameter "
+                  "line_of_sight_latitude_in_degrees in the parameter file.");
 }
 
 void Sky::initialize_sky_pixels() {

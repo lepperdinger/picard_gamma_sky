@@ -15,6 +15,9 @@ public:
   tensors::tensor_2d compute_gamma_skies();
 
 private:
+  static void check_parameter(bool condition,
+                              const std::string &condition_string);
+  void check_parameters() const;
   void initialize_sky_pixels();
   void initialize_relative_emissivity_grid();
   /**
