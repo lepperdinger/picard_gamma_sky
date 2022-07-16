@@ -35,10 +35,12 @@ target_compile_options(gamma_sky PRIVATE -Wall -Wextra -Wpedantic) # -Werror)
 
 # tests ########################################################################
 
-add_executable(test_mathematics test/test_mathematics.cpp ${SRC})
-target_link_libraries(test_mathematics gtest gtest_main ${HDF5_LIBRARIES}
-                      ${HEALPIX_LIBRARIES} TBB::tbb)
-add_test(test_mathematics test_mathematics)
+foreach(TEST_NAME test_mathematics test_grids)
+  add_executable(${TEST_NAME} test/${TEST_NAME}.cpp ${SRC})
+  target_link_libraries(${TEST_NAME} gtest gtest_main ${HDF5_LIBRARIES}
+                        ${HEALPIX_LIBRARIES} TBB::tbb)
+  add_test(${TEST_NAME} test_mathematics)
+endforeach()
 
 enable_testing()
 

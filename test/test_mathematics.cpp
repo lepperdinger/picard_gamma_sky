@@ -1,7 +1,7 @@
+#include "mathematics.h"
+#include <array>
 #include <gtest/gtest.h>
 #include <vector>
-#include <array>
-#include "mathematics.h"
 
 namespace mathematics {
 
@@ -90,7 +90,6 @@ TEST(mathematics, spherical_to_cartesian) {
   EXPECT_NEAR(result[x], 26.0502356, tolerance);
   EXPECT_NEAR(result[y], 11.13824614, tolerance);
   EXPECT_NEAR(result[z], 31.00523663, tolerance);
-
 }
 
 } // namespace mathematics
