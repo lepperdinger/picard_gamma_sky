@@ -39,7 +39,7 @@ foreach(TEST_NAME test_mathematics test_grids test_LineOfSightIntegral)
   add_executable(${TEST_NAME} test/${TEST_NAME}.cpp ${SRC})
   target_link_libraries(${TEST_NAME} gtest gtest_main ${HDF5_LIBRARIES}
                         ${HEALPIX_LIBRARIES} TBB::tbb)
-  add_test(${TEST_NAME} test_mathematics)
+  add_test(${TEST_NAME} ${TEST_NAME})
 endforeach()
 
 enable_testing()
