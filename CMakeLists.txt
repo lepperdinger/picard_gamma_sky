@@ -35,7 +35,7 @@ target_compile_options(gamma_sky PRIVATE -Wall -Wextra -Wpedantic -Werror)
 
 # tests ########################################################################
 
-foreach(TEST_NAME test_mathematics test_grids)
+foreach(TEST_NAME test_mathematics test_grids test_LineOfSightIntegral)
   add_executable(${TEST_NAME} test/${TEST_NAME}.cpp ${SRC})
   target_link_libraries(${TEST_NAME} gtest gtest_main ${HDF5_LIBRARIES}
                         ${HEALPIX_LIBRARIES} TBB::tbb)

@@ -16,4 +16,3 @@ TEST(grids, is_within_grid) {
   EXPECT_EQ(false, grid.is_within_grid({0., -32., 0.}));
   EXPECT_EQ(false, grid.is_within_grid({0., 0., -20.}));
 }
-
