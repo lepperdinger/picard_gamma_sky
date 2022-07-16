@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
-#include <array>
+#include "TrilinearInterpolation.h"
 #include "grids.h"
 #include "tensors.h"
-#include "TrilinearInterpolation.h"
+#include <array>
+#include <gtest/gtest.h>
 
 namespace test_TrilinearInterpolation {
 
@@ -34,11 +34,10 @@ grids::cartesian_grid_3d create_3d_grid() {
 }
 
 tensors::tensor_3d create_grid_values(const grids::cartesian_grid_3d &grid) {
-  auto values = tensors::make_3d_tensor({grid.x_centers.size(),
-                                         grid.y_centers.size(),
-                                         grid.z_centers.size()});
+  auto values = tensors::make_3d_tensor(
+      {grid.x_centers.size(), grid.y_centers.size(), grid.z_centers.size()});
 
-  for (size_t x{}; x != grid.x_centers.size(); ++ x) {
+  for (size_t x{}; x != grid.x_centers.size(); ++x) {
     double x_center = grid.x_centers[x];
     for (size_t y{}; y != grid.y_centers.size(); ++y) {
       double y_center = grid.y_centers[y];
