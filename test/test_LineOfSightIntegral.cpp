@@ -46,10 +46,14 @@ TEST(LineOfSightIntegral, sin2) {
   auto grid = create_grid();
   auto grid_values = create_grid_values(grid);
   LineOfSightIntegral integral(radial_step_size_in_kpc, grid, grid_values);
-  double longitude = 0.;
-  double latitude = 0.;
   double expected = 1.;
   double tolerance = 1e-10;
+
+  double longitude = 0.;
+  double latitude = 0.;
+  EXPECT_NEAR(expected, integral(longitude, latitude), tolerance);
+
+  longitude = mathematics::pi;
   EXPECT_NEAR(expected, integral(longitude, latitude), tolerance);
 }
 
