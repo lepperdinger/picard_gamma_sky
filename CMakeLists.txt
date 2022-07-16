@@ -26,12 +26,12 @@ find_package(HealPix REQUIRED)
 
 # gamma_sky ####################################################################
 
-include_directories(src ${HEALPIX_INCLUDE_DIR})
+include_directories(src SYSTEM ${HEALPIX_INCLUDE_DIR})
 file(GLOB SRC CONFIGURE_DEPENDS "src/*.h" "src/*.cpp")
 add_executable(gamma_sky apps/gamma_sky.cpp ${SRC})
 target_link_libraries(gamma_sky ${HDF5_LIBRARIES} ${HEALPIX_LIBRARIES}
                       TBB::tbb)
-target_compile_options(gamma_sky PRIVATE -Wall -Wextra -Wpedantic) # -Werror)
+target_compile_options(gamma_sky PRIVATE -Wall -Wextra -Wpedantic -Werror)
 
 # tests ########################################################################
 
