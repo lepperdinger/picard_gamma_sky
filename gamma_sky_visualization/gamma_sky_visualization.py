@@ -15,7 +15,7 @@ import sys
 def read_data(gamma_sky_file_path, energy_index):
     with File(gamma_sky_file_path) as file:
         skies = np.array(file['gamma ray skies'])
-        energies = np.float32(file['energies'])
+        energies = np.array(file['energies'])
         energy_unit = file['energies'].attrs['unit'].decode()
         sky_flux_unit = file['gamma ray skies'].attrs['unit'].decode()
 
@@ -48,7 +48,7 @@ def plot_sky(sky, energy, logarithmic):
     :type sky: np.array
 
     :param energy: energy of the gamma sky in MeV
-    :type energy: np.float32
+    :type energy: float
 
     :param logarithmic: plot the logarithm of the fluxes if true
     :type logarithmic: bool
