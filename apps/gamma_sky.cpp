@@ -32,8 +32,9 @@ int main(int argc, char *argv[]) {
   Sky sky(energies, emissivities, emissivity_grid, parameters);
   auto gamma_skies = sky.compute_gamma_skies();
 
-  // save gamma skies
+  // save results and metadata
   output_file.save_skies(gamma_skies);
-
+  output_file.save_energies(energies);
+  output_file.save_parameters(parameters);
   return 0;
 }

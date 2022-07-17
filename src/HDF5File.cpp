@@ -1,6 +1,5 @@
 #include "HDF5File.h"
 #include <cassert>
-#include <fstream>
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -168,7 +167,7 @@ void HDF5File::save_skies(const tensors::tensor_2d &skies) {
   hid_t data_space =
       H5Screate_simple(number_of_dimensions, dimensions.get(), nullptr);
 
-  std::string dataset_name = "gamma_ray_skies";
+  std::string dataset_name = "gamma ray skies";
   hid_t dataset = H5Dcreate(file, dataset_name.c_str(), H5T_NATIVE_FLOAT,
                             data_space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
@@ -186,6 +185,82 @@ void HDF5File::save_skies(const tensors::tensor_2d &skies) {
                           H5P_DEFAULT, buffer.get());
   assert(error >= 0);
 
+  add_unit_to_dataset(dataset, "MeV / (cm^2 sr s)");
+  add_description_to_dataset(
+      dataset, "Gamma sky fluxes at the position of the observer. Data "
+               "dimensions: (energy, HEALPix pixel)");
+
   H5Dclose(dataset);
   H5Sclose(data_space);
+}
+
+void HDF5File::save_vector(const std::vector<double> &vector,
+                           const std::string &name, const std::string &unit,
+                           const std::string &description) {
+  int number_of_dimensions = 1;
+  auto dimensions = std::make_unique<hsize_t[]>(number_of_dimensions);
+  dimensions[0] = vector.size();
+  hid_t data_space =
+      H5Screate_simple(number_of_dimensions, dimensions.get(), nullptr);
+  hid_t dataset = H5Dcreate(file, name.c_str(), H5T_NATIVE_FLOAT, data_space,
+                            H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+  auto buffer = std::make_unique<float[]>(vector.size());
+  for (size_t i{}; i != vector.size(); ++i) {
+    buffer[i] = static_cast<float>(vector[i]);
+  }
+  herr_t error = H5Dwrite(dataset, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL,
+                          H5P_DEFAULT, buffer.get());
+  assert(error >= 0);
+  add_unit_to_dataset(dataset, unit);
+  add_description_to_dataset(dataset, description);
+  H5Dclose(dataset);
+  H5Sclose(data_space);
+}
+
+void HDF5File::save_scalar(double scalar, const std::string &name,
+                           const std::string &unit,
+                           const std::string &description) {
+  hid_t data_space = H5Screate(H5S_SCALAR);
+  hid_t dataset = H5Dcreate(file, name.c_str(), H5T_NATIVE_DOUBLE, data_space,
+                            H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+  herr_t error = H5Dwrite(dataset, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL,
+                          H5P_DEFAULT, &scalar);
+  assert(error >= 0);
+  add_unit_to_dataset(dataset, unit);
+  add_description_to_dataset(dataset, description);
+}
+
+void HDF5File::add_string_attribute(hid_t dataset,
+                                    const std::string &attribute_name,
+                                    const std::string &string) {
+  hid_t attribute_space = H5Screate(H5S_SCALAR);
+  hid_t attribute_type = H5Tcopy(H5T_C_S1);
+  H5Tset_size(attribute_type, string.size());
+  H5Tset_strpad(attribute_type, H5T_STR_NULLTERM);
+  hid_t attribute = H5Acreate2(dataset, attribute_name.c_str(), attribute_type,
+                               attribute_space, H5P_DEFAULT, H5P_DEFAULT);
+  herr_t error = H5Awrite(attribute, attribute_type, string.c_str());
+  assert(error >= 0);
+}
+
+void HDF5File::save_energies(const std::vector<double> &energies) {
+  save_vector(energies, "energies", "MeV", "energies of the gamma ray skies");
+}
+
+void HDF5File::save_parameters(ParameterFile::Parameters parameters) {
+  const auto &observer = parameters.xyz_observer_location;
+  const auto &longitude = parameters.line_of_sight_longitude;
+  const auto &latitude = parameters.line_of_sight_latitude;
+  const auto &step_size = parameters.radial_step_size;
+  const auto &order = parameters.healpix_order;
+
+  save_vector({observer.cbegin(), observer.cend()}, "xyz observer location",
+              "kpc", "(x, y, z) location of the observer within the galaxy");
+  save_vector({longitude, latitude}, "line of sight longitude, latitude",
+              "radian", "the direction in which the observer looks");
+
+  save_scalar(step_size, "radial step size", "kpc",
+              "the radial step size used for the line of sight integration");
+  save_scalar(order, "HEALPix order", "unitless",
+              "determines the number of HEALPix pixels");
 }
