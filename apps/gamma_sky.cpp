@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "HDF5File.h"
 #include "ParameterFile.h"
 #include "Sky.h"

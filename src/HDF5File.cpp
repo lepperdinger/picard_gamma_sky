@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "HDF5File.h"
 #include <cassert>
 #include <iostream>

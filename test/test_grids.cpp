@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "grids.h"
 #include <gtest/gtest.h>
 

@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "ParameterFile.h"
 #include <iostream>
 #include <regex>

@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "TrilinearInterpolation.h"
 #include "grids.h"
 #include "tensors.h"

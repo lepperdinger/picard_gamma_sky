@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "Sky.h"
 #include "mathematics.h"
 #include <LineOfSightIntegral.h>

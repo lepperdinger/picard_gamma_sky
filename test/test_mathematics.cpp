@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "mathematics.h"
 #include <array>
 #include <gtest/gtest.h>

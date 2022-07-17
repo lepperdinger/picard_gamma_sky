@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "grids.h"
 
 namespace grids {

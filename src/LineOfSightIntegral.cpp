@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "LineOfSightIntegral.h"
 #include "mathematics.h"
 #include <cmath>

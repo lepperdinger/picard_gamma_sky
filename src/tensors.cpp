@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "tensors.h"
 
 namespace tensors {

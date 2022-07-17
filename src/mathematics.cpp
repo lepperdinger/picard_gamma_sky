@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "mathematics.h"
 #include <cmath>
 

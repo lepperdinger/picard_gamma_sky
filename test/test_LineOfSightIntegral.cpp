@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #include "LineOfSightIntegral.h"
 #include "grids.h"
 #include "mathematics.h"

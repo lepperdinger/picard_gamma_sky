@@ -1,3 +1,4 @@
+// Author: Stefan Lepperdinger
 #ifndef GAMMA_SKY_SRC_PARAMETERFILE_H
 #define GAMMA_SKY_SRC_PARAMETERFILE_H
 
