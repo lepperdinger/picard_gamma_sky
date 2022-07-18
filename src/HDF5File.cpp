@@ -229,6 +229,8 @@ void HDF5File::save_scalar(double scalar, const std::string &name,
   assert(error >= 0);
   add_unit_to_dataset(dataset, unit);
   add_description_to_dataset(dataset, description);
+  H5Dclose(dataset);
+  H5Sclose(data_space);
 }
 
 void HDF5File::add_string_attribute(hid_t dataset,
@@ -242,6 +244,9 @@ void HDF5File::add_string_attribute(hid_t dataset,
                                attribute_space, H5P_DEFAULT, H5P_DEFAULT);
   herr_t error = H5Awrite(attribute, attribute_type, string.c_str());
   assert(error >= 0);
+  H5Aclose(attribute);
+  H5Tclose(attribute_type);
+  H5Sclose(attribute_space);
 }
 
 void HDF5File::save_energies(const std::vector<double> &energies) {
