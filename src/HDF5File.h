@@ -62,7 +62,8 @@ private:
    * @param energy_index determines the energy of the emissivity
    * @return emissivity[x][y][z] in MeV / (s sr cm³)
    */
-  tensors::tensor_3d read_emissivity(size_t energy_index);
+  tensors::tensor_3d read_emissivity(size_t energy_index,
+                                     size_t number_of_energies);
   /**
    * Reads an attribute vector from the group "/Data" of the HDF5 file.
    * @param attribute_name name of the attribute

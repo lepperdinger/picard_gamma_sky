@@ -1,6 +1,8 @@
 // Author: Stefan Lepperdinger
 #include "HDF5File.h"
 #include <cassert>
+#include <cmath>
+#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -37,9 +39,12 @@ void HDF5File::close_file() {
   }
 }
 
-tensors::tensor_3d HDF5File::read_emissivity(size_t energy_index) {
+tensors::tensor_3d HDF5File::read_emissivity(size_t energy_index,
+                                             size_t number_of_energies) {
+  int number_of_digits = static_cast<int>(log10(number_of_energies)) + 1;
   std::ostringstream dataset_name;
-  dataset_name << "/Data/total_emission_E" << energy_index;
+  dataset_name << "/Data/total_emission_E" << std::setfill('0')
+               << std::setw(number_of_digits) << energy_index;
   hid_t dataset = H5Dopen2(file, dataset_name.str().c_str(), H5P_DEFAULT);
   hid_t file_space = H5Dget_space(dataset);
   int number_of_dimensions = H5Sget_simple_extent_ndims(file_space);
@@ -86,7 +91,7 @@ tensors::tensor_4d HDF5File::read_emissivities() {
   hssize_t number_of_energies = get_number_of_energies();
   tensors::tensor_4d emissivities;
   for (hssize_t energy{}; energy != number_of_energies; ++energy) {
-    auto emissivity = read_emissivity(energy);
+    auto emissivity = read_emissivity(energy, number_of_energies);
     emissivities.push_back(emissivity);
   }
   return emissivities;
