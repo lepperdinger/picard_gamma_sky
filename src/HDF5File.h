@@ -8,6 +8,8 @@
 #include <hdf5.h>
 #include <string>
 
+using std::size_t;
+
 /**
  * Class for reading and writing to HDF5 files.
  */

@@ -7,6 +7,8 @@
 #include "tensors.h"
 #include <healpix_map.h>
 
+using std::size_t;
+
 class Sky {
 public:
   Sky(const std::vector<double> &energies,

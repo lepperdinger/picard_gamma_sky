@@ -5,6 +5,8 @@
 #include <array>
 #include <vector>
 
+using std::size_t;
+
 namespace tensors {
 
 using tensor_1d = std::vector<double>;

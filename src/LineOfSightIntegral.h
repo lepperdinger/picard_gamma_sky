@@ -7,6 +7,8 @@
 #include "tensors.h"
 #include <array>
 
+using std::size_t;
+
 class LineOfSightIntegral {
 public:
   /**

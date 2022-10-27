@@ -5,6 +5,8 @@
 #include "grids.h"
 #include "tensors.h"
 
+using std::size_t;
+
 class TrilinearInterpolation {
 public:
   /**
