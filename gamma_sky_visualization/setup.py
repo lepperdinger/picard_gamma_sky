@@ -1,12 +1,12 @@
 import setuptools
 
 setuptools.setup(
-    name='picard_gas_interpolation',
+    name='gamma_sky_visualization',
     version='1.0.0',
-    description='',
+    description='Visualizes the gamma skies produced by picard_gamma_sky.',
     author='Stefan Lepperdinger',
     author_email='lepperdinger.stefan@gmail.com',
-    url='https://github.com/lepperdinger/picard_gas_interpolation',
+    url='https://github.com/lepperdinger/picard_gamma_sky',
     packages=setuptools.find_packages(),
     entry_points={
         'console_scripts': [
