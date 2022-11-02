@@ -48,7 +48,7 @@ resulting gamma sky gets saved into `<output H5 file>`.
 
 ### Visualization
 
-The gamma skies can be visualizied via a Python script located in
+The gamma skies can be visualized via a Python script located in
 `picard_gas_interpolation`. First, I recommend creating a virtual environment:
 ```
 virtualenv venv
