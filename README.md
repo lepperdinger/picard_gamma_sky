@@ -46,6 +46,14 @@ direction into which the observer looks (see `example_parameters.config`).
 `<input H5 file>` should contain the emissivities calculated by PICARD. The
 resulting gamma sky gets saved into `<output H5 file>`.
 
+### Tests
+
+The tests can be executed with the `ctest` command:
+```
+cd build
+ctest
+```
+
 ### Visualization
 
 The gamma skies can be visualized via a Python script located in
