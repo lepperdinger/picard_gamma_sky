@@ -25,6 +25,7 @@ double TrilinearInterpolation::operator()(std::array<double, 3> xyz_location) {
   double y_p = double_y_index - static_cast<double>(y_i);
   double z_p = double_z_index - static_cast<double>(z_i);
 
+  // see http://paulbourke.net/miscellaneous/interpolation/
   double interpolated_value =
       (values[x_i][y_i][z_i] * (1 - x_p) * (1 - y_p) * (1 - z_p) // 000
        + values[x_i + 1][y_i][z_i] * x_p * (1 - y_p) * (1 - z_p) // 100
