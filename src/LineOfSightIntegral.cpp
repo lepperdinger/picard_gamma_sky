@@ -17,7 +17,7 @@ void LineOfSightIntegral::initialize_integration_factor() {
   double pc_to_m = 3.0856775814913673e16;
   double kpc_to_cm = 1e3 * 1e2 * pc_to_m;
   double radial_step_size_in_cm = radial_step_size * kpc_to_cm;
-  integration_factor = radial_step_size_in_cm / mathematics::four_pi;
+  integration_factor = radial_step_size_in_cm;
 }
 
 void LineOfSightIntegral::initialize_radial_cells() {
